@@ -1,37 +1,39 @@
 const mongoose = require("mongoose");
 
 const AttemptSchema = new mongoose.Schema({
-  studentId:{
-    type:mongoose.Schema.Types.ObjectId,
-    ref:"User"
+  studentId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User",
+    required: true
   },
 
-  testId:{
-    type:mongoose.Schema.Types.ObjectId,
-    ref:"Test"
+  testId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Test",
+    required: true
   },
 
-  answers:[
+  answers: [
     {
-      questionId:String,
-      answer:String
+      questionId: String,
+      answer: String
     }
   ],
 
-  notes:[
+  notes: [
     {
-      questionId:String,
-      note:String
+      questionId: String,
+      note: String
     }
   ],
 
-  difficultyMarks:[
+  difficultyMarks: [
     {
-      questionId:String,
-      level:String
+      questionId: String,
+      level: String
     }
   ]
 
-},{timestamps:true});
+}, { timestamps: true });
 
-module.exports = mongoose.model("Attempt",AttemptSchema);
+module.exports = mongoose.model("Attempt", AttemptSchema);

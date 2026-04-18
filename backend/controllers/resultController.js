@@ -1,46 +1,112 @@
 const Result = require("../models/Result");
 const Attempt = require("../models/Attempt");
-const Question = require("../models/Question");
+const Test = require("../models/Test");
 
-exports.generateResult = async(req,res)=>{
+// OPTIONAL MANUAL RESULT GENERATION
+exports.generateResult = async (req, res) => {
+  try {
+    const { attemptId } = req.body;
 
- try{
+    const attempt = await Attempt.findById(attemptId);
 
-  const {attemptId} = req.body;
-
-  const attempt = await Attempt.findById(attemptId);
-
-  const questions = await Question.find({testId:attempt.testId});
-
-  let score = 0;
-
-  attempt.answers.forEach(ans=>{
-    const q = questions.find(q=>q._id.toString() === ans.questionId);
-    if(q && q.correctAnswer === ans.answer){
-      score++;
+    if (!attempt) {
+      return res.status(404).json({ message: "Attempt not found" });
     }
-  });
 
-  let suggestion = "Good attempt. Practice more.";
+    const test = await Test.findById(attempt.testId);
 
-  if(score < questions.length/2){
-    suggestion = "Focus on basics and practice easy questions.";
+    if (!test) {
+      return res.status(404).json({ message: "Test not found" });
+    }
+
+    let score = 0;
+
+    attempt.answers.forEach((ans) => {
+      const q = test.questions.find(
+        (q) => q._id.toString() === ans.questionId
+      );
+
+      if (q && q.answer === ans.answer) {
+        score++;
+      }
+    });
+
+    let suggestion = "Good attempt. Practice more.";
+
+    if (score < test.questions.length / 2) {
+      suggestion = "Focus on basics and practice easy questions.";
+    } else if (score >= test.questions.length * 0.7) {
+      suggestion = "Great job! Try harder questions.";
+    }
+
+    let result = await Result.findOne({
+      studentId: attempt.studentId,
+      testId: attempt.testId
+    });
+
+    if (result) {
+      result.score = score;
+      result.total = test.questions.length;
+      result.suggestion = suggestion;
+      await result.save();
+    } else {
+      result = new Result({
+        studentId: attempt.studentId,
+        testId: attempt.testId,
+        score,
+        total: test.questions.length,
+        suggestion
+      });
+
+      await result.save();
+    }
+
+    res.json(result);
+
+  } catch (err) {
+    console.error("GENERATE RESULT ERROR:", err);
+    res.status(500).json({ message: err.message });
   }
+};
 
-  const result = new Result({
-    studentId:attempt.studentId,
-    testId:attempt.testId,
-    score:score,
-    total:questions.length,
-    suggestion:suggestion
-  });
+// GET TEST ANALYSIS
+exports.getTestAnalysis = async (req, res) => {
+  try {
+    const { testId } = req.params;
 
-  await result.save();
+    const results = await Result.find({ testId })
+      .populate("studentId", "name email")
+      .populate("testId");
 
-  res.json(result);
+    if (!results || results.length === 0) {
+      return res.json({
+        totalStudents: 0,
+        avgScore: 0,
+        highestScore: 0,
+        lowestScore: 0,
+        results: []
+      });
+    }
 
- }catch(err){
-  res.status(500).json(err.message);
- }
+    const scores = results.map((r) => r.score);
 
+    const totalStudents = results.length;
+    const avgScore = Math.round(
+      scores.reduce((a, b) => a + b, 0) / totalStudents
+    );
+    const highestScore = Math.max(...scores);
+    const lowestScore = Math.min(...scores);
+
+    res.json({
+      totalStudents,
+      avgScore,
+      highestScore,
+      lowestScore,
+      results
+    });
+
+  } catch (error) {
+    console.error("GET TEST ANALYSIS ERROR:", error);
+    res.status(500).json({ message: "Server error" });
+  }
 };

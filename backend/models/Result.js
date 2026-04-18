@@ -1,21 +1,33 @@
 const mongoose = require("mongoose");
 
 const ResultSchema = new mongoose.Schema({
-
-  studentId:{
-    type:mongoose.Schema.Types.ObjectId,
-    ref:"User"
+  studentId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User",
+    required: true
   },
 
-  testId:{
-    type:mongoose.Schema.Types.ObjectId,
-    ref:"Test"
+  testId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Test",
+    required: true
   },
 
-  score:Number,
-  total:Number,
-  suggestion:String
+  score: {
+    type: Number,
+    default: 0
+  },
 
-},{timestamps:true});
+  total: {
+    type: Number,
+    default: 0
+  },
 
-module.exports = mongoose.model("Result",ResultSchema);
+  suggestion: {
+    type: String,
+    default: ""
+  }
+
+}, { timestamps: true });
+
+module.exports = mongoose.model("Result", ResultSchema);

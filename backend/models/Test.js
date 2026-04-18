@@ -1,18 +1,53 @@
 const mongoose = require("mongoose");
 
-// ✅ DEFINE QuestionSchema FIRST
+// Embedded question schema
 const QuestionSchema = new mongoose.Schema({
-  question: String,
-  options: [String],
-  answer: String,
-  difficulty: String,   // easy | medium | hard
-  topic: String
+  question: {
+    type: String,
+    required: true
+  },
+  options: {
+    type: [String],
+    required: true
+  },
+  answer: {
+    type: String,
+    required: true
+  },
+  difficulty: {
+    type: String,
+    enum: ["Easy", "Medium", "Hard"],
+    default: "Easy"
+  },
+  topic: {
+    type: String,
+    default: "General"
+  }
 });
 
-// ✅ THEN USE IT
 const TestSchema = new mongoose.Schema({
-  title: String,
-  questions: [QuestionSchema]
-});
+  title: {
+    type: String,
+    required: true
+  },
+
+  calculatorEnabled: {
+    type: Boolean,
+    default: false
+  },
+  duration: {
+    type: Number,
+    default: 10
+  },
+
+  questions: [QuestionSchema],
+
+  facultyId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User",
+    required: true
+  }
+
+}, { timestamps: true });
 
 module.exports = mongoose.model("Test", TestSchema);

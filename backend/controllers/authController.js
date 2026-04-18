@@ -33,12 +33,12 @@ exports.register = async (req, res) => {
 
 // LOGIN
 exports.login = async (req, res) => {
-  const { email, password } = req.body;
+  const { email, password, role } = req.body;
 
-  console.log('Login attempt:', { email, password });
+  console.log('Login attempt:', { email, password, role });
 
   try {
-    const user = await User.findOne({ email });
+    const user = await User.findOne({ email, role });
 
     if (!user) {
       console.log('User not found for email:', email);
@@ -60,9 +60,15 @@ exports.login = async (req, res) => {
 
     console.log('Login successful for:', email, 'role:', user.role);
 
+    // UPDATED RESPONSE (added user details)
     res.json({
       token,
-      role: user.role
+      role: user.role,
+      user: {
+        _id: user._id,
+        name: user.name,
+        email: user.email
+      }
     });
 
   } catch (error) {
