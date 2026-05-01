@@ -1,0 +1,201 @@
+body{
+  margin:0;
+  font-family:'Segoe UI';
+  background:#f1f3f6;
+}
+
+.container{
+  width:85%;
+  margin:auto;
+}
+
+.card{
+  background:white;
+  padding:20px;
+  border-radius:8px;
+  margin-top:20px;
+  box-shadow:0 3px 10px rgba(0,0,0,0.1);
+}
+
+button{
+  padding:8px 15px;
+  border:none;
+  border-radius:5px;
+  cursor:pointer;
+  margin:4px;
+}
+
+.primary{
+  background:#007bff;
+  color:white;
+}
+
+.green{
+  background:#28a745;
+  color:white;
+}
+
+.yellow{
+  background:#ffc107;
+}
+
+.red{
+  background:#dc3545;
+  color:white;
+}
+
+.timer{
+  font-size:22px;
+  font-weight:bold;
+  color:#e63946;
+}
+
+.question-nav{
+  display:grid;
+  grid-template-columns:repeat(10,1fr);
+  gap:5px;
+  margin-top:20px;
+}
+
+.nav-btn{
+  padding:6px;
+  background:#e9ecef;
+}
+
+.attempted{
+  background:#28a745;
+  color:white;
+}
+.exam-container{
+  display:flex;
+  flex-direction: column;   
+  gap:20px;
+}
+.question-box {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.question-area{
+  flex:3;
+}
+
+.navigator{
+  flex:1;
+  background:white;
+  padding:15px;
+  border-radius:8px;
+  box-shadow:0 2px 8px rgba(0,0,0,0.1);
+}
+
+.nav-grid{
+  display:grid;
+  grid-template-columns:repeat(5,1fr);
+  gap:8px;
+}
+
+.nav-btn{
+  padding:8px;
+  border:none;
+  border-radius:4px;
+  background:#e9ecef;
+  cursor:pointer;
+}
+
+.nav-btn.active{
+  background:#007bff;
+  color:white;
+}
+
+.nav-btn.attempted{
+  background:#28a745;
+  color:white;
+}
+
+.controls{
+  margin-top:20px;
+}
+
+.controls button{
+  margin-right:10px;
+}
+/* Floating calculator button */
+
+.calc-button{
+  position:fixed;
+  bottom:20px;
+  right:20px;
+  background:#007bff;
+  color:white;
+  border:none;
+  padding:15px;
+  border-radius:50%;
+  font-size:20px;
+  cursor:pointer;
+}
+
+/* Calculator popup */
+
+.calc-popup{
+  position:fixed;
+  bottom:80px;
+  right:20px;
+  width:220px;
+  background:white;
+  padding:10px;
+  border-radius:8px;
+  box-shadow:0 4px 10px rgba(0,0,0,0.2);
+}
+
+/* Header */
+
+.calc-header{
+  display:flex;
+  justify-content:space-between;
+  margin-bottom:10px;
+  font-weight:bold;
+}
+
+/* Display */
+
+.calc-display{
+  width:100%;
+  padding:5px;
+  margin-bottom:10px;
+}
+
+/* Grid buttons */
+
+.calc-grid{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:5px;
+}
+
+.calc-grid button{
+  padding:10px;
+  background:#f1f1f1;
+  border:none;
+  cursor:pointer;
+}
+.difficulty {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  display: inline-block;
+  margin-right: 8px;
+  border: 2px solid #ccc;
+}
+
+.easy {
+  background-color: green;
+}
+
+.medium {
+  background-color: yellow;
+}
+
+.hard {
+  background-color: red;
+}
